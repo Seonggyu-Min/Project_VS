@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,9 +11,12 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private PlayerInput _playerInput;
     [SerializeField] private SpriteRenderer _spriteRenderer;
 
-    [SerializeField] private float _moveSpeed;
+    [Header("Movement Settings")]
+    [SerializeField] private float _moveSpeed = 2f;
     [SerializeField] private Vector2 inputVector;
 
+    [Header("Player Look Vector (for skills)")]
+    public Vector2 PlayerLookVector;
 
     [Header("Anims")]
     private readonly int Idle_Hash = Animator.StringToHash("Idle");
@@ -24,6 +27,7 @@ public class PlayerMove : MonoBehaviour
     private void OnEnable()
     {
         _playerInput.onActionTriggered += GetInput;
+        PlayerStatManager.Instance.MoveSpeed.Subscribe(SetMoveSpeedByStat);
     }
 
     private void OnDisable()
@@ -46,6 +50,7 @@ public class PlayerMove : MonoBehaviour
             if (ctx.action.name == "Move")
             {
                 inputVector = ctx.ReadValue<Vector2>();
+                PlayerLookVector = inputVector.normalized; // 스킬의 방향 선정을 위한 벡터
             }
         }
 
@@ -86,5 +91,10 @@ public class PlayerMove : MonoBehaviour
         {
             _animator.Play(Idle_Hash);
         }
+    }
+
+    public void SetMoveSpeedByStat(float speed)
+    {
+        _moveSpeed = speed;
     }
 }

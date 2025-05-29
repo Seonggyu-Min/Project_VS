@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab4788a529fc1154ebbca4bcbfb6b38e, type: 3}
+  m_Name: FlameGroundSkillsSO
+  m_EditorClassIdentifier: 
+  SkillName: FlameGround
+  Damage: 10
+  Cooldown: 5
+  ProjectileNumber: 1
+  ProjectileSpeed: 0
+  Size: 1
+  Duration: 10
+  KnockbackForce: 0
+  Prefab: {fileID: 2863028103272347996, guid: 308bf6514ce8cc54cae91a74d74a5c33, type: 3}

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -90,18 +90,18 @@ public class PlayerStatManager : MonoBehaviour, IDamageable
 
     private void InitStat()
     {
-        _currentHealth = _maxHealth; // ÃÊ±â Ã¼·Â ¼³Á¤
-        MoveSpeed.Value = 2f; // ÃÊ±â ÀÌµ¿ ¼Óµµ ¼³Á¤
+        _currentHealth = _maxHealth; // ì´ˆê¸° ì²´ë ¥ ì„¤ì •
+        MoveSpeed.Value = 2f; // ì´ˆê¸° ì´ë™ ì†ë„ ì„¤ì •
     }
 
     public void TakeDamage(int damage)
     {
         if (_canTakeDamage)
         {
-            _graceTimeCoroutine = StartCoroutine(GraceTime()); // ¹«Àû ½Ã°£ ÄÚ·çÆ¾
-            _graceFlickerCoroutine = StartCoroutine(GraceFlick()); // ±ôºıÀÓ ÄÚ·çÆ¾
+            _graceTimeCoroutine = StartCoroutine(GraceTime()); // ë¬´ì  ì‹œê°„ ì½”ë£¨í‹´
+            _graceFlickerCoroutine = StartCoroutine(GraceFlick()); // ê¹œë¹¡ì„ ì½”ë£¨í‹´
 
-            // ºñÀ² °¨»ê
+            // ë¹„ìœ¨ ê°ì‚°
             float damageMultiplier = 1f - _armor / (_armor + 100f);
             _currentHealth -= Mathf.RoundToInt(damage * damageMultiplier);
 
@@ -143,7 +143,7 @@ public class PlayerStatManager : MonoBehaviour, IDamageable
 
     private void Die()
     {
-        // TODO: °ÔÀÓ ¸Å´ÏÀú È£Ãâ
+        // TODO: ê²Œì„ ë§¤ë‹ˆì € í˜¸ì¶œ
     }
 
     private IEnumerator GraceTime()
@@ -170,14 +170,14 @@ public class PlayerStatManager : MonoBehaviour, IDamageable
             flickTimer += flickingTime;
 
             Color color = _playerSpriteRenderer.color;
-            color.a = (color.a == 1f) ? 0.8f : 1f; // Åõ¸íµµ ±ôºıÀÓ
+            color.a = (color.a == 1f) ? 0.8f : 1f; // íˆ¬ëª…ë„ ê¹œë¹¡ì„
             _playerSpriteRenderer.color = color;
 
             yield return new WaitForSeconds(flickingTime);
         }
 
         Color c = _playerSpriteRenderer.color;
-        c.a = 1f; // Åõ¸íµµ º¹¿ø
+        c.a = 1f; // íˆ¬ëª…ë„ ë³µì›
         _playerSpriteRenderer.color = c;
     }
 }

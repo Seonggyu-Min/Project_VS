@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.RuleTile.TilingRuleOutput;
@@ -11,7 +11,7 @@ public class CardDrawManager : MonoBehaviour
     [SerializeField] private RectTransform _middleCardPos;
     [SerializeField] private RectTransform _rightCardPos;
 
-    // Ä«µå Draw ½Ã »ç¿ëÇÒ º¯¼öµé
+    // ì¹´ë“œ Draw ì‹œ ì‚¬ìš©í•  ë³€ìˆ˜ë“¤
     private GameObject _leftCard;
     private GameObject _middleCard;
     private GameObject _rightCard;
@@ -32,18 +32,18 @@ public class CardDrawManager : MonoBehaviour
         Instance = null;
     }
 
-    // PlayerStatManager¿¡¼­ ·¹º§ ¾÷ ½Ã È£ÃâµÉ ¸Ş¼­µå, ¸Å°³º¯¼öÇüÀ» ¸ÂÃß±â À§ÇÔ
+    // PlayerStatManagerì—ì„œ ë ˆë²¨ ì—… ì‹œ í˜¸ì¶œë  ë©”ì„œë“œ, ë§¤ê°œë³€ìˆ˜í˜•ì„ ë§ì¶”ê¸° ìœ„í•¨
     public void OnLevelUp(int newLevel)
     {
         ShowCard();
     }
 
-    // ·¹º§ ¾÷ ½Ã È£ÃâµÉ ¸Ş¼­µå
+    // ë ˆë²¨ ì—… ì‹œ í˜¸ì¶œë  ë©”ì„œë“œ
     public void ShowCard()
     {
         if (_cardList.Count < 3)
         {
-            Debug.LogWarning("Ä«µå ¸®½ºÆ®¿¡ Ä«µå°¡ ÃæºĞÇÏÁö ¾Ê½À´Ï´Ù. ÃÖ¼Ò 3°³ÀÇ Ä«µå°¡ ÇÊ¿äÇÕ´Ï´Ù.");
+            Debug.LogWarning("ì¹´ë“œ ë¦¬ìŠ¤íŠ¸ì— ì¹´ë“œê°€ ì¶©ë¶„í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤. ìµœì†Œ 3ê°œì˜ ì¹´ë“œê°€ í•„ìš”í•©ë‹ˆë‹¤.");
             return;
         }
 
@@ -51,10 +51,10 @@ public class CardDrawManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        // ¿ŞÂÊ Ä«µå ÀÎµ¦½º »ı¼º
+        // ì™¼ìª½ ì¹´ë“œ ì¸ë±ìŠ¤ ìƒì„±
         int leftCardIndex = Random.Range(0, _cardList.Count);
 
-        // Áßº¹ Á¦°Å ¹× Áß°£ Ä«µå ÀÎµ¦½º »ı¼º
+        // ì¤‘ë³µ ì œê±° ë° ì¤‘ê°„ ì¹´ë“œ ì¸ë±ìŠ¤ ìƒì„±
         int middleCardIndex;
         do
         {
@@ -62,7 +62,7 @@ public class CardDrawManager : MonoBehaviour
         }
         while (middleCardIndex == leftCardIndex);
 
-        // Áßº¹ Á¦°Å ¹× ¿À¸¥ÂÊ Ä«µå ÀÎµ¦½º »ı¼º
+        // ì¤‘ë³µ ì œê±° ë° ì˜¤ë¥¸ìª½ ì¹´ë“œ ì¸ë±ìŠ¤ ìƒì„±
         int rightCardIndex;
         do
         {
@@ -70,12 +70,12 @@ public class CardDrawManager : MonoBehaviour
         }
         while (rightCardIndex == leftCardIndex || rightCardIndex == middleCardIndex);
 
-        // Ä«µå º¯¼ö ÃÊ±âÈ­
+        // ì¹´ë“œ ë³€ìˆ˜ ì´ˆê¸°í™”
         _leftCard = null;
         _middleCard = null;
         _rightCard = null;
 
-        // °¢°¢ÀÇ Ä«µå SetActive(true) ¹× À§Ä¡ ¼³Á¤
+        // ê°ê°ì˜ ì¹´ë“œ SetActive(true) ë° ìœ„ì¹˜ ì„¤ì •
         _leftCard = _cardList[leftCardIndex];
         _leftCard.SetActive(true);
         _leftCard.transform.position = _leftCardPos.position;
@@ -98,31 +98,31 @@ public class CardDrawManager : MonoBehaviour
         _rightCard.transform.eulerAngles = rightYAngle;
     }
 
-    // ½ºÅ³À» ¾òÀ» ¶§ È£ÃâÇÒ ¸Ş¼­µå
+    // ìŠ¤í‚¬ì„ ì–»ì„ ë•Œ í˜¸ì¶œí•  ë©”ì„œë“œ
     public void RegisterAndRemoveCard(GameObject registerCard, GameObject removeCard)
     {
-        // ½ºÅ³ ¾÷±×·¹ÀÌµå Ä«µå µî·Ï
+        // ìŠ¤í‚¬ ì—…ê·¸ë ˆì´ë“œ ì¹´ë“œ ë“±ë¡
         if (_cardList.Contains(registerCard))
         {
-            Debug.LogWarning($"{registerCard}°¡ ÀÌ¹Ì µî·ÏµÇ¾î ÀÖÀ½");
+            Debug.LogWarning($"{registerCard}ê°€ ì´ë¯¸ ë“±ë¡ë˜ì–´ ìˆìŒ");
         }
         else
         {
             _cardList.Add(registerCard);
         }
 
-        // ½ºÅ³ È¹µæ Ä«µå »èÁ¦
+        // ìŠ¤í‚¬ íšë“ ì¹´ë“œ ì‚­ì œ
         if (_cardList.Contains(removeCard))
         {
             _cardList.Remove(removeCard);
         }
         else
         {
-            Debug.LogWarning($"»èÁ¦ÇÒ {removeCard}°¡ ¸®½ºÆ®¿¡ Á¸ÀçÇÏÁö ¾ÊÀ½");
+            Debug.LogWarning($"ì‚­ì œí•  {removeCard}ê°€ ë¦¬ìŠ¤íŠ¸ì— ì¡´ì¬í•˜ì§€ ì•ŠìŒ");
         }
     }
 
-    // TODO: Ä«µå°¡ ¼±ÅÃµÇ¾úÀ» ¶§, °ü·Ã UI È¿°ú ¿¬Ãâ ¹× SetActive(false) Ã³¸®
+    // TODO: ì¹´ë“œê°€ ì„ íƒë˜ì—ˆì„ ë•Œ, ê´€ë ¨ UI íš¨ê³¼ ì—°ì¶œ ë° SetActive(false) ì²˜ë¦¬
     public void EndEffectOfCardSelection()
     {
         Time.timeScale = 1f;
@@ -134,7 +134,7 @@ public class CardDrawManager : MonoBehaviour
         _rightCardCoroutine = StartCoroutine(CardRotateRoutine(_rightCard));
     }
 
-    // Ä«µå È¸Àü ÀÌÆåÆ®
+    // ì¹´ë“œ íšŒì „ ì´í™íŠ¸
     private IEnumerator CardRotateRoutine(GameObject card)
     {
         while (card.transform.eulerAngles.y < 90f)

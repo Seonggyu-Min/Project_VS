@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3248e00ebe730914d9ca76d7e9c5b6ec, type: 3}
+  m_Name: MoveSpeedCardsSO
+  m_EditorClassIdentifier: 
+  UpgradeType: 1
+  SkillName: MoveSpeed
+  DamageMultiplier: 0
+  CooldownMultiplier: 0
+  ProjectileSpeedMultiplier: 0
+  ProjectileNumberMultiplier: 0
+  SizeMultiplier: 0
+  DurationMultiplier: 0
+  KnockbackForceMultiplier: 0
+  HealthMultiplier: 0
+  HealthRegenMultiplier: 0
+  ArmorMultiplier: 0
+  MoveSpeedMultiplier: 0.3
+  GracePeriodMultiplier: 0
+  ExpMultiplier: 0
+  GoldMultiplier: 0
+  MagnetRangeMultiplier: 0
+  LuckMultiplier: 0
+  ReviveMultiplier: 0

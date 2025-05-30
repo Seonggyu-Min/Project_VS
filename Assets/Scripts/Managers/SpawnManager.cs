@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    private Dictionary<BaseMonster, ObjectPool<BaseMonster>> _pools = new ();
+    private Dictionary<BaseMonster, ObjectPool<BaseMonster>> _pools = new();
 
     // n번째 웨이브 분리용 리스트 분리
     [SerializeField] private List<BaseMonster> monsterPrefabs_1;
@@ -17,9 +17,13 @@ public class SpawnManager : MonoBehaviour
 
     [SerializeField] private float _spawnTimer;
     [SerializeField] private float _spawnTimerMax = 2f;
+    [SerializeField] private float _spawnTimersubtractor = 0.3f;
 
-    [SerializeField] private Transform _target;
+    [SerializeField] private Transform _playerTransform;
 
+    [SerializeField] private int _currentStage = 1;
+
+    private Vector2 spawnPoint;
 
     public static SpawnManager Instance { get; private set; }
 
@@ -28,38 +32,148 @@ public class SpawnManager : MonoBehaviour
     {
         Init();
 
-        // 싱글톤 처럼 사용하기 위함
         Instance = this;
     }
 
-
-
     private void Update()
     {
-        _spawnTimer += Time.deltaTime;
-
-        if (_spawnTimer >= _spawnTimerMax)
-        {
-            _spawnTimer = 0f;
-
-            Spawn(monsterPrefabs_1[0], transform.position, _target);
-            Spawn(monsterPrefabs_1[1], transform.position, _target);
-        }
+        HandleSpawn();
     }
-
 
     private void OnDestroy()
     {
         Instance = null;
     }
 
-
-
+    // 몬스터 프리팹 풀링
     private void Init()
     {
         foreach (BaseMonster prefab in monsterPrefabs_1)
         {
             _pools[prefab] = new ObjectPool<BaseMonster>(transform, prefab, 20);
+        }
+
+        foreach (BaseMonster prefab in monsterPrefabs_2)
+        {
+            _pools[prefab] = new ObjectPool<BaseMonster>(transform, prefab, 20);
+        }
+
+        foreach (BaseMonster prefab in monsterPrefabs_3)
+        {
+            _pools[prefab] = new ObjectPool<BaseMonster>(transform, prefab, 20);
+        }
+
+        foreach (BaseMonster prefab in monsterPrefabs_4)
+        {
+            _pools[prefab] = new ObjectPool<BaseMonster>(transform, prefab, 20);
+        }
+
+        foreach (BaseMonster prefab in monsterPrefabs_5)
+        {
+            _pools[prefab] = new ObjectPool<BaseMonster>(transform, prefab, 20);
+        }
+
+        foreach (BaseMonster prefab in monsterPrefabs_6)
+        {
+            _pools[prefab] = new ObjectPool<BaseMonster>(transform, prefab, 20);
+        }
+
+        // 스테이지7 미구현 상태
+        //foreach (BaseMonster prefab in monsterPrefabs_7)
+        //{
+        //    _pools[prefab] = new ObjectPool<BaseMonster>(transform, prefab, 20);
+        //}
+    }
+
+    private void HandleSpawn()
+    {
+        _spawnTimer += Time.deltaTime;
+
+        switch (_currentStage)
+        {
+            case 1:
+                if (_spawnTimer >= _spawnTimerMax)
+                {
+                    foreach (var monster in monsterPrefabs_1)
+                    {
+                        Spawn(monster, GetRandomSpawnPos(), _playerTransform);
+                    }
+
+                    _spawnTimer = 0f;
+                }
+                break;
+
+            case 2:
+                if (_spawnTimer >= _spawnTimerMax)
+                {
+                    foreach (var monster in monsterPrefabs_2)
+                    {
+                        Spawn(monster, GetRandomSpawnPos(), _playerTransform);
+                    }
+                    _spawnTimer = 0f;
+                }
+                break;
+
+            case 3:
+                if (_spawnTimer >= _spawnTimerMax)
+                {
+                    foreach (var monster in monsterPrefabs_3)
+                    {
+                        Spawn(monster, GetRandomSpawnPos(), _playerTransform);
+                    }
+                    _spawnTimer = 0f;
+                }
+                break;
+
+            case 4:
+                if (_spawnTimer >= _spawnTimerMax)
+                {
+                    foreach (var monster in monsterPrefabs_4)
+                    {
+                        Spawn(monster, GetRandomSpawnPos(), _playerTransform);
+                    }
+                    _spawnTimer = 0f;
+                }
+                break;
+
+            case 5:
+                if (_spawnTimer >= _spawnTimerMax)
+                {
+                    foreach (var monster in monsterPrefabs_5)
+                    {
+                        Spawn(monster, GetRandomSpawnPos(), _playerTransform);
+                    }
+                    _spawnTimer = 0f;
+                }
+                break;
+
+            case 6:
+                if (_spawnTimer >= _spawnTimerMax)
+                {
+                    foreach (var monster in monsterPrefabs_6)
+                    {
+                        Spawn(monster, GetRandomSpawnPos(), _playerTransform);
+                    }
+                    _spawnTimer = 0f;
+                }
+                break;
+
+            // 스테이지7 미구현 상태
+            //case 7:
+            //    if (_spawnTimer >= _spawnTimerMax)
+            //    {
+            //        foreach (var monster in monsterPrefabs_7)
+            //        {
+            //            Spawn(monster, GetRandomSpawnPos(), _playerTransform);
+            //        }
+            //        _spawnTimer = 0f;
+            //    }
+            //    break;
+
+            default:
+                Debug.LogWarning($"유효하지 않은 스테이지: {_currentStage}");
+                break;
+
         }
     }
 
@@ -69,5 +183,29 @@ public class SpawnManager : MonoBehaviour
         monster.transform.position = pos;
         monster.InitBaseMonster(target);
         return monster;
+    }
+
+    private Vector2 GetRandomSpawnPos()
+    {
+        // 현재 카메라 비율 16 : 9
+        // 카메라 size = 8
+        // 세로 = 16
+        // 가로 = 16 * (16 / 9) = 28.44
+        // 반지름( 28.44 / 2 = 14.22)의 원을 통해 랜덤 위치 생성
+        float camDist = 14.22f + 2f; // 2f는 추가 여유 거리
+
+        float randomAngle = Random.Range(0f, 360f);
+        float randomRad = randomAngle * Mathf.Deg2Rad;
+
+        Vector2 spawnPoint = _playerTransform.position;
+        spawnPoint.x += Mathf.Cos(randomRad) * camDist;
+        spawnPoint.y += Mathf.Sin(randomRad) * camDist;
+
+        return spawnPoint;
+    }
+
+    public void StageAdder()
+    {
+        _currentStage++;
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -60,14 +60,14 @@ public class PlayerStatManager : MonoBehaviour, IDamageable
 
     private void Start()
     {
-        CurrentLevel.Subscribe(CardDrawManager.Instance.OnLevelUp);
+        CurrentLevel.Subscribe(CardDrawManager.Instance.ShowCard);
         MoveSpeed.Subscribe(_playerMove.SetMoveSpeedByStat);
     }
 
     private void OnDisable()
     {
         MoveSpeed.Unsubscribe(_playerMove.SetMoveSpeedByStat);
-        CurrentLevel.Unsubscribe(CardDrawManager.Instance.OnLevelUp);
+        CurrentLevel.Unsubscribe(CardDrawManager.Instance.ShowCard);
 
         Instance = null;
     }

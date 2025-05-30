@@ -1,7 +1,7 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.RuleTile.TilingRuleOutput;
+//using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class CardDrawManager : MonoBehaviour
 {
@@ -33,10 +33,10 @@ public class CardDrawManager : MonoBehaviour
     }
 
     // PlayerStatManager에서 레벨 업 시 호출될 메서드, 매개변수형을 맞추기 위함
-    public void OnLevelUp(int newLevel)
-    {
-        ShowCard();
-    }
+    //public void OnLevelUp(int newLevel)
+    //{
+    //    ShowCard();
+    //}
 
     // 레벨 업 시 호출될 메서드
     public void ShowCard()

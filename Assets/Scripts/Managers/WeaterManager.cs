@@ -32,6 +32,7 @@ public class WeaterManager : MonoBehaviour
 
     public static WeaterManager Instance { get; private set; }
 
+    public ObservableProperty<int> CurrentStage { get; private set; } = new(1);
     public bool IsStarted { get; set; } = false;
     public float PlayTime => _playTime;
 
@@ -39,6 +40,11 @@ public class WeaterManager : MonoBehaviour
     {
         Instance = this;
         SetColor();
+    }
+
+    private void Start()
+    {
+        CurrentStage.Subscribe(SpawnManager.Instance.StageAdder);
     }
 
     private void Update()
@@ -54,6 +60,7 @@ public class WeaterManager : MonoBehaviour
 
     private void OnDisable()
     {
+        CurrentStage.Unsubscribe(SpawnManager.Instance.StageAdder);
         Instance = null;
     }
 
@@ -96,6 +103,8 @@ public class WeaterManager : MonoBehaviour
         {
             _currentWeatherType = GetWeatherType();
             ApplyWeather(_currentWeatherType);
+
+            AddStage();
         }
     }
 
@@ -182,6 +191,11 @@ public class WeaterManager : MonoBehaviour
                 _isPreparingLightning = false;
             }
         }
+    }
+
+    private void AddStage()
+    {
+        CurrentStage.Value++;
     }
 
 

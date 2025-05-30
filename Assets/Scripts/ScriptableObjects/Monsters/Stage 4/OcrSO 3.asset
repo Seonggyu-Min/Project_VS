@@ -15,5 +15,5 @@ MonoBehaviour:
   MonsterName: Ocr3
   Damage: 40
   Speed: 1.4
-  MaxHealth: 800
+  MaxHealth: 200
   DropExp: 10

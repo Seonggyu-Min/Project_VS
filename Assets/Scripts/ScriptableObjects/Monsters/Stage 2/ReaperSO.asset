@@ -15,5 +15,5 @@ MonoBehaviour:
   MonsterName: Reaper
   Damage: 20
   Speed: 1.2
-  MaxHealth: 200
+  MaxHealth: 100
   DropExp: 10

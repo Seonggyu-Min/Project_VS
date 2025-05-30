@@ -15,5 +15,5 @@ MonoBehaviour:
   MonsterName: EvilWizard 2
   Damage: 60
   Speed: 1.6
-  MaxHealth: 3200
+  MaxHealth: 300
   DropExp: 10

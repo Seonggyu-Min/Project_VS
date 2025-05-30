@@ -15,5 +15,5 @@ MonoBehaviour:
   MonsterName: BringerOfDeath
   Damage: 50
   Speed: 1.5
-  MaxHealth: 1600
+  MaxHealth: 250
   DropExp: 10

@@ -15,5 +15,5 @@ MonoBehaviour:
   MonsterName: EvilWizard 1
   Damage: 60
   Speed: 1.6
-  MaxHealth: 3200
+  MaxHealth: 300
   DropExp: 10

@@ -15,5 +15,5 @@ MonoBehaviour:
   MonsterName: Plant2
   Damage: 30
   Speed: 1.3
-  MaxHealth: 400
+  MaxHealth: 150
   DropExp: 10

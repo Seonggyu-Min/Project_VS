@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -27,6 +27,8 @@ public abstract class BaseMonster : PooledObject<BaseMonster>, IDamageable
 
     private Transform _target;
 
+    protected bool _isDead = false;
+
     public int MaxHealth => _maxHealth;
     public int CurrentHealth => _currentHealth;
     public int Damage => _damage;
@@ -53,11 +55,14 @@ public abstract class BaseMonster : PooledObject<BaseMonster>, IDamageable
 
     protected virtual void Trace()
     {
-        Vector2 dir;
-        dir.x = _target.position.x - _rb.position.x;
-        dir.y = _target.position.y - _rb.position.y;
+        if (!_isDead)
+        {
+            Vector2 dir;
+            dir.x = _target.position.x - _rb.position.x;
+            dir.y = _target.position.y - _rb.position.y;
 
-        _rb.MovePosition(_rb.position + dir.normalized * MoveSpeed * Time.fixedDeltaTime);
+            _rb.MovePosition(_rb.position + dir.normalized * MoveSpeed * Time.fixedDeltaTime);
+        }
     }
 
 
@@ -86,6 +91,7 @@ public abstract class BaseMonster : PooledObject<BaseMonster>, IDamageable
     protected virtual void ResetMonster()
     {
         _isReddish = false;
+        _isDead = false;
         _getRedTimer = 0f;
         _spriteRenderer.color = _originColor;
         _animator.Play(Walk_Hash);
@@ -102,6 +108,7 @@ public abstract class BaseMonster : PooledObject<BaseMonster>, IDamageable
 
         if (_currentHealth <= 0)
         {
+            _isDead = true;
             _animator.Play(Die_Hash);
         }
 

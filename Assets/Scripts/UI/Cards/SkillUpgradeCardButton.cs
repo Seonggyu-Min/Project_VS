@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using TMPro;
@@ -12,10 +12,19 @@ public class SkillUpgradeCardButton : MonoBehaviour
     [SerializeField] private TMP_Text _upperText;
     [SerializeField] private TMP_Text _lowerText;
 
+    private bool _isCardSelected = false;
+
     private StringBuilder _upSb = new StringBuilder();
     private StringBuilder _lowSb = new StringBuilder();
 
+
     private void OnEnable()
+    {
+        InitSkillText();
+        InitCardButton();
+    }
+
+    private void InitSkillText()
     {
         _upSb.Clear();
         _upSb.AppendLine(_upgradeCardsSO.SkillName);
@@ -26,9 +35,18 @@ public class SkillUpgradeCardButton : MonoBehaviour
         _lowerText.text = _lowSb.ToString();
     }
 
+    private void InitCardButton()
+    {
+        _isCardSelected = false;
+    }
+
     public void OnClickCard()
     {
+        if (_isCardSelected)
+            return;
+
         _upgradeCardsSO?.ApplyUpgradeCard();
+        _isCardSelected = true;
 
         CardDrawManager.Instance.EndEffectOfCardSelection();
     }

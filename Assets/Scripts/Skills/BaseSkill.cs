@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -28,6 +28,26 @@ public abstract class BaseSkill : PooledObject<BaseSkill>
     private float _cooldownTimer;
     private bool _isReady = true;
 
+    // Skill Muliplier
+
+    protected float _damageMultiplier = 1f;
+    protected float _cooldownMultiplier = 1f;
+    protected float _projectileNumberMultiplier = 1f;
+    protected float _projectileSpeedMultiplier = 1f;
+    protected float _sizeMultiplier = 1f;
+    protected float _durationMultiplier = 1f;
+    protected float _knockbackForceMultiplier = 1f;
+
+    public float DamageMultiplier => _damageMultiplier;
+    public float CooldownMultiplier => _cooldownMultiplier;
+    public float ProjectileNumberMultiplier => _projectileNumberMultiplier;
+    public float ProjectileSpeedMultiplier => _projectileSpeedMultiplier;
+    public float SizeMultiplier => _sizeMultiplier;
+    public float DurationMultiplier => _durationMultiplier;
+    public float KnockbackForceMultiplier => _knockbackForceMultiplier;
+
+
+
 
     public string SkillName => _skillName;
     public int Damage => _damage;
@@ -40,6 +60,13 @@ public abstract class BaseSkill : PooledObject<BaseSkill>
     public float CooldownTimer => _cooldownTimer;
     public bool IsReady => _isReady;
 
+    public SkillsSO SkillsSO => _skillsSO;
+
+
+    [SerializeField] AudioSource _spawnAudioSource;
+
+    //protected float _SkillSpawnSoundVolume;
+
 
     private void Awake()
     {
@@ -50,6 +77,7 @@ public abstract class BaseSkill : PooledObject<BaseSkill>
     {
         _destoryTimer = 0f;
         InitSkillSize();
+        PlaySpawnAudio();
     }
 
     protected virtual void Update()
@@ -84,33 +112,50 @@ public abstract class BaseSkill : PooledObject<BaseSkill>
     }
 
     public void UpgradeSkill(
-        float damage = 0,
-        float cd = 0,
-        float projectileNumber = 0,
-        float projectileSpeed = 0,
-        float size = 0,
-        float duration = 0,
-    float knockbackForce = 0
+        float damage = 1f,
+        float cd = 1f,
+        float projectileNumber = 1f,
+        float projectileSpeed = 1f,
+        float size = 1f,
+        float duration = 1f,
+        float knockbackForce = 1f
         )
     {
-        _damage = Mathf.RoundToInt(Damage * damage);
-
-        if (_cooldown * cd >= 0.1f)
+        if (_damageMultiplier != damage)
         {
-            _cooldown *= cd;
+            _damageMultiplier = damage;
+            _damage = Mathf.RoundToInt(_skillsSO.Damage * damage);
         }
-        else
+        if (_cooldownMultiplier != cd)
         {
-            _cooldown = 0.1f;
-            Debug.Log("쿨다운은 0.1미만이 될 수 없음");
+            _cooldownMultiplier = cd;
+            _cooldown = Mathf.Max(0.1f, _skillsSO.Cooldown * cd); // 쿨다운은 최소 0.1초
         }
-
-        _projectileNumber = Mathf.RoundToInt(_projectileNumber * projectileNumber);
-
-        _projectileSpeed *= projectileSpeed;
-        _size *= size;
-        _duration *= duration;
-        _knockbackForce *= knockbackForce;
+        if (_projectileNumberMultiplier != projectileNumber)
+        {
+            _projectileNumberMultiplier = projectileNumber;
+            _projectileNumber = Mathf.RoundToInt(_skillsSO.ProjectileNumber * projectileNumber);
+        }
+        if (_projectileSpeedMultiplier != projectileSpeed)
+        {
+            _projectileSpeedMultiplier = projectileSpeed;
+            _projectileSpeed = _skillsSO.ProjectileSpeed * projectileSpeed;
+        }
+        if (_sizeMultiplier != size)
+        {
+            _sizeMultiplier = size;
+            _size = _skillsSO.Size * size;
+        }
+        if (_durationMultiplier != duration)
+        {
+            _durationMultiplier = duration;
+            _duration = _skillsSO.Duration * duration;
+        }
+        if (_knockbackForceMultiplier != knockbackForce)
+        {
+            _knockbackForceMultiplier = knockbackForce;
+            _knockbackForce = _skillsSO.KnockbackForce * knockbackForce;
+        }
     }
 
     public void SetPlayerReferences(Transform playerTransform, PlayerMove playerMove)
@@ -161,5 +206,13 @@ public abstract class BaseSkill : PooledObject<BaseSkill>
                 Debug.LogWarning($"IDamageable이 {collision.gameObject.name}에 없음");
             }
         }
+    }
+
+    protected virtual void PlaySpawnAudio()
+    {
+        float randomPitch = Random.Range(0.8f, 1.2f);
+        _spawnAudioSource.pitch = randomPitch;
+        _spawnAudioSource.volume = GameManager.Instance.AudioManager.SFXVolume;
+        _spawnAudioSource.Play();
     }
 }

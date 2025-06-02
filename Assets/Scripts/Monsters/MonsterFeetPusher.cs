@@ -13,6 +13,11 @@ public class MonsterFeetPusher : MonoBehaviour
 
     private bool _isDead = false;
 
+    private void OnEnable()
+    {
+        _pushForce = 25f;
+    }
+
     private void FixedUpdate()
     {
         if (!_isDead)

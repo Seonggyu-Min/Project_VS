@@ -33,8 +33,10 @@ public class WeaterManager : MonoBehaviour
     public static WeaterManager Instance { get; private set; }
 
     public ObservableProperty<int> CurrentStage { get; private set; } = new(1);
-    public bool IsStarted { get; set; } = false;
+    public bool IsStarted { get; set; } = true;
     public float PlayTime => _playTime;
+
+    [SerializeField] private InGameBGMPlayer _inGameBGMPlayer;
 
     private void Awake()
     {
@@ -45,6 +47,7 @@ public class WeaterManager : MonoBehaviour
     private void Start()
     {
         CurrentStage.Subscribe(SpawnManager.Instance.StageAdder);
+        CurrentStage.Subscribe(_inGameBGMPlayer.ChangeBGMIndex);
     }
 
     private void Update()
@@ -61,6 +64,7 @@ public class WeaterManager : MonoBehaviour
     private void OnDisable()
     {
         CurrentStage.Unsubscribe(SpawnManager.Instance.StageAdder);
+        CurrentStage.Unsubscribe(_inGameBGMPlayer.ChangeBGMIndex);
         Instance = null;
     }
 

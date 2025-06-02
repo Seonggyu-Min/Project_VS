@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -24,7 +24,7 @@ public class PlayerMove : MonoBehaviour
     //private readonly int Death_Hash = Animator.StringToHash("Death");
 
 
-    private void OnEnable()
+    private void Start()
     {
         _playerInput.onActionTriggered += GetInput;
         PlayerStatManager.Instance.MoveSpeed.Subscribe(SetMoveSpeedByStat);

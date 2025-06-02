@@ -4,6 +4,8 @@ using UnityEngine;
 
 public abstract class BaseMonster : PooledObject<BaseMonster>, IDamageable
 {
+    [SerializeField] private MonsterFeetPusher _feetPusher;
+
     [SerializeField] protected MonstersSO _monstersSO;
     [SerializeField] protected Rigidbody2D _rb;
     [SerializeField] SpriteRenderer _spriteRenderer;
@@ -16,6 +18,8 @@ public abstract class BaseMonster : PooledObject<BaseMonster>, IDamageable
 
     [SerializeField] protected Animator _animator;
 
+    [SerializeField] private PlayerStatManager _playerStatManager;
+
     private readonly int Walk_Hash = Animator.StringToHash("Walk");
     private readonly int Die_Hash = Animator.StringToHash("Die");
 
@@ -27,7 +31,10 @@ public abstract class BaseMonster : PooledObject<BaseMonster>, IDamageable
 
     private Transform _target;
 
-    protected bool _isDead = false;
+
+
+    public ObservableProperty<bool> IsDead { get; private set; } = new(false);
+
 
     public int MaxHealth => _maxHealth;
     public int CurrentHealth => _currentHealth;
@@ -35,11 +42,22 @@ public abstract class BaseMonster : PooledObject<BaseMonster>, IDamageable
     public float MoveSpeed => _moveSpeed;
     public int DropExp => _dropExp;
 
+    [SerializeField] protected AudioSource _monsterHitSource;
+    protected float _monsterHitVolume;
+
     protected virtual void Awake()
     {
         _originColor = _spriteRenderer.color;
     }
 
+    protected virtual void OnEnable()
+    {
+        IsDead.Subscribe(_feetPusher.SetDead);
+    }
+    protected virtual void OnDisable()
+    {
+        IsDead.Unsubscribe(_feetPusher.SetDead);
+    }
 
     protected virtual void FixedUpdate()
     {
@@ -55,7 +73,7 @@ public abstract class BaseMonster : PooledObject<BaseMonster>, IDamageable
 
     protected virtual void Trace()
     {
-        if (!_isDead)
+        if (!IsDead.Value)
         {
             Vector2 dir;
             dir.x = _target.position.x - _rb.position.x;
@@ -91,7 +109,7 @@ public abstract class BaseMonster : PooledObject<BaseMonster>, IDamageable
     protected virtual void ResetMonster()
     {
         _isReddish = false;
-        _isDead = false;
+        IsDead.Value = false;
         _getRedTimer = 0f;
         _spriteRenderer.color = _originColor;
         _animator.Play(Walk_Hash);
@@ -106,9 +124,11 @@ public abstract class BaseMonster : PooledObject<BaseMonster>, IDamageable
         //Debug.Log($"{gameObject.name}의 체력이 {Health}만큼 남음");
         _currentHealth -= damage;
 
+        PlayHitAudio();
+
         if (_currentHealth <= 0)
         {
-            _isDead = true;
+            IsDead.Value = true;
             _animator.Play(Die_Hash);
         }
 
@@ -145,6 +165,10 @@ public abstract class BaseMonster : PooledObject<BaseMonster>, IDamageable
     {
         gameObject.SetActive(false);
         ReturnPool();
+        ExpGemBehaviour expGem = ExpDropManager.Instance.GetExpGemInstance();
+        expGem.transform.position = transform.position;
+
+        GameManager.Instance.InGameCountManager.AddKillCount();
     }
 
     protected virtual void HandleCollision(Collider2D collision)
@@ -170,5 +194,14 @@ public abstract class BaseMonster : PooledObject<BaseMonster>, IDamageable
                 Debug.LogWarning($"IDamageable이 {collision.gameObject.name}에 없음");
             }
         }
+    }
+
+
+    protected virtual void PlayHitAudio()
+    {
+        float randomPitch = Random.Range(0.8f, 1.2f);
+        _monsterHitSource.pitch = randomPitch;
+        _monsterHitSource.volume = GameManager.Instance.AudioManager.SFXVolume;
+        _monsterHitSource.Play();
     }
 }

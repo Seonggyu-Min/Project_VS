@@ -28,6 +28,6 @@ MonoBehaviour:
   GracePeriodMultiplier: 0
   ExpMultiplier: 0
   GoldMultiplier: 0
-  MagnetRangeMultiplier: 0.3
+  MagnetRangeMultiplier: 0.5
   LuckMultiplier: 0
   ReviveMultiplier: 0

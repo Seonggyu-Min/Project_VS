@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GracePeriodCardsSO
   m_EditorClassIdentifier: 
   UpgradeType: 1
-  SkillName: GoldMultiplier
+  SkillName: GracePeriod
   DamageMultiplier: 0
   CooldownMultiplier: 0
   ProjectileSpeedMultiplier: 0

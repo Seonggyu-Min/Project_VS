@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +12,7 @@ public class SkillManager : MonoBehaviour
     [SerializeField] private SkillPoolManager _skillPoolManager;
 
     [Header("Skill Slots")]
-    [SerializeField] private Dictionary<string, ActiveSkillSlot> _skillDict = new();
+    [SerializeField] public Dictionary<string, ActiveSkillSlot> SkillDict = new();
 
     public static SkillManager Instance { get; private set; }
 
@@ -37,7 +37,7 @@ public class SkillManager : MonoBehaviour
 
     public void AddSkill(SkillsSO data)
     {
-        if (_skillDict.ContainsKey(data.SkillName))
+        if (SkillDict.ContainsKey(data.SkillName))
         {
             Debug.LogWarning($"이미 같은 이름의 스킬이 존재함: {data.SkillName}");
             return;
@@ -53,7 +53,7 @@ public class SkillManager : MonoBehaviour
             }
         });
 
-        _skillDict.Add(data.SkillName, slot);
+        SkillDict.Add(data.SkillName, slot);
 
         // 즉시 발동
         slot.TryUseSkill(_playerTransform, _playerMove);
@@ -61,17 +61,17 @@ public class SkillManager : MonoBehaviour
 
     private void ClearSkills()
     {
-        foreach (var slot in _skillDict.Values)
+        foreach (var slot in SkillDict.Values)
         {
             slot.IsReady.UnsbscribeAll();
         }
 
-        _skillDict.Clear();
+        SkillDict.Clear();
     }
 
     public void ApplyCardUpgrade(UpgradeCardsSO card)
     {
-        if (_skillDict.TryGetValue(card.SkillName, out var slot))
+        if (SkillDict.TryGetValue(card.SkillName, out var slot))
         {
             slot.ApplyUpgradeFromCard(card);
         }
@@ -85,6 +85,6 @@ public class SkillManager : MonoBehaviour
     // CardDrawManager 중복 검사용
     public List<string> GetOwnedSkillNames()
     {
-        return new List<string>(_skillDict.Keys);
+        return new List<string>(SkillDict.Keys);
     }
 }

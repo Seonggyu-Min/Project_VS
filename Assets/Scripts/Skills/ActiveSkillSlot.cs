@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem.Utilities;
@@ -16,11 +16,25 @@ public class ActiveSkillSlot
     private float _knockbackForceMultiplier = 1f;
 
 
+    public string SkillName => Data.SkillName;
+    public float DamageMultiplier => _damageMultiplier;
+    public float CooldownMultiplier => _cooldownMultiplier;
+    public float ProjectileNumberMultiplier => _projectileNumberMultiplier;
+    public float ProjectileSpeedMultiplier => _projectileSpeedMultiplier;
+    public float SizeMultiplier => _sizeMultiplier;
+    public float DurationMultiplier => _durationMultiplier;
+    public float KnockbackForceMultiplier => _knockbackForceMultiplier;
+
+
+
+
     public float Cooldown => Data.Cooldown;
     private float _cooldownTimer;
     public ObservableProperty<bool> IsReady { get; private set; } = new();
 
     private Coroutine _cooldownCoroutine;
+    private Coroutine _multipleUseCoroutine;
+    [SerializeField] private float _multipleUseDelay = 0.2f; // 다중 사용 시 딜레이 시간
 
     private MonoBehaviour _context;
 
@@ -37,7 +51,7 @@ public class ActiveSkillSlot
     {
         if (!IsReady.Value) return;
 
-        BaseSkill skill = SkillPoolManager.Instance.GetSkillInstance(Data.Prefab);
+        BaseSkill skill = SkillPoolManager.Instance.GetSkillInstance(Data.Prefab); // 프리팹을 인스턴스화해서 풀링, CircularElectricity는 풀링이 필요없으므로 1개만 생성하도록 예외처리 필요함
         skill.SetPlayerReferences(playerTransform, playerMove);
         skill.InitSkillPosition();
 
@@ -50,6 +64,11 @@ public class ActiveSkillSlot
             duration: _durationMultiplier,
             knockbackForce: _knockbackForceMultiplier
             );
+
+        if (skill.ProjectileNumber > 1)
+        {
+            _multipleUseCoroutine = _context.StartCoroutine(MultipleUseRoutine((skill.ProjectileNumber - 1), playerTransform, playerMove));
+        }
 
         _cooldownCoroutine = _context.StartCoroutine(CooldownRoutine());
     }
@@ -66,6 +85,28 @@ public class ActiveSkillSlot
         }
 
         IsReady.Value = true;
+    }
+
+    private IEnumerator MultipleUseRoutine(int num, Transform playerTransform, PlayerMove playerMove)
+    {
+        for (int i = 0; i < num; i++)
+        {
+            yield return new WaitForSeconds(_multipleUseDelay);
+            
+            BaseSkill skill = SkillPoolManager.Instance.GetSkillInstance(Data.Prefab); // 프리팹을 인스턴스화해서 풀링, CircularElectricity는 풀링이 필요없으므로 1개만 생성하도록 예외처리 필요함
+            skill.SetPlayerReferences(playerTransform, playerMove);
+            skill.InitSkillPosition();
+
+            skill.UpgradeSkill(
+                damage: _damageMultiplier,
+                cd: _cooldownMultiplier,
+                projectileNumber: _projectileNumberMultiplier,
+                projectileSpeed: _projectileSpeedMultiplier,
+                size: _sizeMultiplier,
+                duration: _durationMultiplier,
+                knockbackForce: _knockbackForceMultiplier
+                );
+        }
     }
 
 

@@ -23,8 +23,6 @@ public class SpawnManager : MonoBehaviour
 
     [SerializeField] private int _currentStage = 1;
 
-    private Vector2 spawnPoint;
-
     public static SpawnManager Instance { get; private set; }
 
 
@@ -207,5 +205,6 @@ public class SpawnManager : MonoBehaviour
     public void StageAdder()
     {
         _currentStage++;
+        _spawnTimerMax -= _spawnTimersubtractor;
     }
 }

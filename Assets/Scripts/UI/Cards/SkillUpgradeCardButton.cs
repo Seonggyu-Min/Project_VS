@@ -45,8 +45,9 @@ public class SkillUpgradeCardButton : MonoBehaviour
         if (_isCardSelected)
             return;
 
-        _upgradeCardsSO?.ApplyUpgradeCard();
         _isCardSelected = true;
+
+        _upgradeCardsSO?.ApplyUpgradeCard();
 
         CardDrawManager.Instance.EndEffectOfCardSelection();
     }

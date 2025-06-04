@@ -80,11 +80,18 @@ public class PlayerStatManager : MonoBehaviour, IDamageable
 
     private void Update()
     {
-        // 테스트용 경험치 업, 테스트 이후 삭제예정
+        // 테스트용 경험치 업
         if (Input.GetKeyDown(KeyCode.Space))
         {
             GetExp(50);
             Debug.Log("테스트용 경험치 획득");
+        }
+
+        // 테스트용 체력 회복
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            CurrentHealth.Value = MaxHealth.Value;
+            Debug.Log("테스트용 체력 회복");
         }
 
         HealthRegenerate();
@@ -146,7 +153,7 @@ public class PlayerStatManager : MonoBehaviour, IDamageable
     {
         float randomPitch = Random.Range(0.8f, 1.2f); // 피격 사운드의 피치 랜덤
         _hitSoundSource.pitch = randomPitch;
-        _hitSoundSource.volume = GameManager.Instance.AudioManager.SFXVolume;
+        _hitSoundSource.volume = TitleGameManager.Instance.AudioManager.SFXVolume;
         _hitSoundSource.Play();
     }
 
@@ -163,7 +170,7 @@ public class PlayerStatManager : MonoBehaviour, IDamageable
 
     private void Die()
     {
-        // TODO: 게임 매니저 호출
+        GameManager.Instance.WinOrLoseManager.SetLose();
     }
 
     private IEnumerator GraceTime()

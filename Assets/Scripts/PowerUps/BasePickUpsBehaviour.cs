@@ -5,10 +5,10 @@ using UnityEngine;
 public abstract class BasePickUpsBehaviour<T> : PooledObject<T> where T : BasePickUpsBehaviour<T>
 {
     [SerializeField] protected LayerMask _playerLayer = 1 << 7;
-    [SerializeField] protected float _magnetRange; // TODO: 플레이어에게 받아와야 됨
+    protected float _magnetRange;
     [SerializeField] protected float _moveSpeed = 5f;
 
-    [SerializeField] protected AudioSource _expSoundSource;
+    [SerializeField] protected AudioSource _soundSource;
 
     protected PlayerStatManager _playerStatManager;
     protected Transform _playerTransform;
@@ -49,9 +49,9 @@ public abstract class BasePickUpsBehaviour<T> : PooledObject<T> where T : BasePi
     protected virtual void PlayPickUpSound()
     {
         float randomPitch = Random.Range(0.8f, 1.2f);
-        _expSoundSource.pitch = randomPitch;
-        _expSoundSource.volume = GameManager.Instance.AudioManager.SFXVolume;
-        _expSoundSource.Play();
+        _soundSource.pitch = randomPitch;
+        _soundSource.volume = TitleGameManager.Instance.AudioManager.SFXVolume;
+        _soundSource.Play();
     }
 
     protected virtual IEnumerator ReturnRoutine()

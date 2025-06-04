@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class CardDrawManager : MonoBehaviour
 {
+    [SerializeField] private AudioSource _audioSource;
+
     [SerializeField] private List<GameObject> _cardList = new();
 
     [SerializeField] private RectTransform _leftCardPos;
@@ -96,6 +98,8 @@ public class CardDrawManager : MonoBehaviour
         Vector3 rightYAngle = _rightCard.transform.eulerAngles;
         rightYAngle.y = 0f;
         _rightCard.transform.eulerAngles = rightYAngle;
+
+        PlayShowCardSound();
     }
 
     // 스킬을 얻을 때 호출할 메서드
@@ -129,22 +133,28 @@ public class CardDrawManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        _leftCardCoroutine = StartCoroutine(CardRotateRoutine(_leftCard));
-        _middleCardCoroutine = StartCoroutine(CardRotateRoutine(_middleCard));
-        _rightCardCoroutine = StartCoroutine(CardRotateRoutine(_rightCard));
+        _leftCard.SetActive(false);
+        _middleCard.SetActive(false);
+        _rightCard.SetActive(false);
     }
 
-    // 카드 회전 이펙트
-    private IEnumerator CardRotateRoutine(GameObject card)
+    private void PlayShowCardSound()
     {
-        while (card.transform.eulerAngles.y < 90f)
-        {
-            card.transform.Rotate(Vector3.up * 15f);
-            yield return new WaitForSeconds(0.1f);
-        }
-
-        // if card.gameObject.CompareTag("GetSkillButton")) { Destroy(card.gameObject); }
-        // else
-        card.SetActive(false);
+        float randomPitch = Random.Range(0.8f, 1.2f);
+        _audioSource.pitch = randomPitch;
+        _audioSource.volume = TitleGameManager.Instance.AudioManager.SFXVolume;
+        _audioSource.Play();
     }
+
+    // 카드 회전 이펙트 -> 삭제
+    //private IEnumerator CardRotateRoutine(GameObject card)
+    //{
+    //    while (card.transform.eulerAngles.y < 90f)
+    //    {
+    //        card.transform.Rotate(Vector3.up * 5f);
+    //        yield return new WaitForSeconds(0.1f);
+    //    }
+
+    //    card.SetActive(false);
+    //}
 }

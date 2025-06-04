@@ -188,7 +188,6 @@ public class BossBehaviour : MonoBehaviour, IDamageable
 
     private IEnumerator ShootProjectilesRoutine()
     {
-        Debug.Log("ShootProjectilesRoutine called");
         _animator.Play(_castHash);
 
         for (int i = 0; i < 50; i++)
@@ -202,7 +201,6 @@ public class BossBehaviour : MonoBehaviour, IDamageable
 
     private IEnumerator JumpSmashRoutine()
     {
-        Debug.Log("JumpSmashRoutine called");
         _animator.Play(_castHash);
         _spriteRenderer.enabled = false;
         _shadowBehaviour.InitShadow();
@@ -214,7 +212,6 @@ public class BossBehaviour : MonoBehaviour, IDamageable
 
     private IEnumerator ChargeRoutine()
     {
-        Debug.Log("ChargeRoutine called");
         _animator.Play(_castHash2);
 
         Vector2 targetPositionAtStart = _targetTransform.position;
@@ -229,7 +226,6 @@ public class BossBehaviour : MonoBehaviour, IDamageable
 
     private IEnumerator TraceRoutine()
     {
-        Debug.Log("TraceRoutine called");
         _animator.Play(_castHash3);
 
         float traceDuration = 10f;
@@ -248,7 +244,6 @@ public class BossBehaviour : MonoBehaviour, IDamageable
 
     private IEnumerator IdleRoutine()
     {
-        Debug.Log("IdleRoutine called");
         _animator.Play(_idleHash);
         _rb.velocity = Vector2.zero;
 

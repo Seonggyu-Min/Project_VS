@@ -37,6 +37,7 @@ public class WeaterManager : MonoBehaviour
     public float PlayTime => _playTime;
 
     [SerializeField] private InGameBGMPlayer _inGameBGMPlayer;
+    [SerializeField] private WeatherIndicatorBehaviour _weatherIndicatorBehaviour;
 
     private void Awake()
     {
@@ -44,16 +45,27 @@ public class WeaterManager : MonoBehaviour
         SetColor();
     }
 
+    private void OnEnable()
+    {
+        SetPlayGame();
+    }
+
     private void Start()
     {
         CurrentStage.Subscribe(SpawnManager.Instance.StageAdder);
         CurrentStage.Subscribe(_inGameBGMPlayer.ChangeBGMIndex);
+        CurrentStage.Subscribe(_weatherIndicatorBehaviour.SetWeather);
     }
 
     private void Update()
     {
         TimeAdder();
         LightningTimeChecker();
+
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            TestPlusTime2();
+        }
     }
 
     private void FixedUpdate()
@@ -65,6 +77,7 @@ public class WeaterManager : MonoBehaviour
     {
         CurrentStage.Unsubscribe(SpawnManager.Instance.StageAdder);
         CurrentStage.Unsubscribe(_inGameBGMPlayer.ChangeBGMIndex);
+        CurrentStage.Unsubscribe(_weatherIndicatorBehaviour.SetWeather);
         Instance = null;
     }
 
@@ -202,6 +215,13 @@ public class WeaterManager : MonoBehaviour
         CurrentStage.Value++;
     }
 
+    private void SetPlayGame()
+    {
+        Time.timeScale = 1f;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
 
 
     [ContextMenu("Test Plus Time for 3 minites")]
@@ -209,6 +229,12 @@ public class WeaterManager : MonoBehaviour
     {
         IsStarted = true;
         _playTime += 180f;
+    }
+
+    // J키를 눌렀을 때 1분 추가
+    private void TestPlusTime2()
+    {
+        _playTime += 60f;
     }
 }
 

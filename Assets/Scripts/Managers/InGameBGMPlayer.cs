@@ -12,6 +12,16 @@ public class InGameBGMPlayer : MonoBehaviour
         PlayBGM();
     }
 
+    private void Start()
+    {
+        TitleGameManager.Instance.AudioManager.RegisterBGMPlayer(this);
+    }
+
+    private void OnDisable()
+    {
+        TitleGameManager.Instance.AudioManager.UnRegisterBGMPlayer(this);
+    }
+
     private void PlayBGM()
     {
         _audioSource.clip = _inGameBGMList[0];
@@ -25,14 +35,14 @@ public class InGameBGMPlayer : MonoBehaviour
 
     public void ChangeBGMIndex(int index)
     {
-        if (index < 0 || index >= _inGameBGMList.Length)
+        if (index <= 0 || index > _inGameBGMList.Length)
         {
-            Debug.LogWarning("Invalid BGM index: " + index);
+            Debug.LogWarning($"Invalid BGM index: {index}");
             return;
         }
 
-        _audioSource.clip = _inGameBGMList[index];
+        _audioSource.clip = _inGameBGMList[index - 1];
         _audioSource.Play();
-        Debug.Log("BGM changed to index: " + index);
+        Debug.Log($"BGM changed to index: {index}");
     }
 }

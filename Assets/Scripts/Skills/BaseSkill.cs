@@ -212,7 +212,7 @@ public abstract class BaseSkill : PooledObject<BaseSkill>
     {
         float randomPitch = Random.Range(0.8f, 1.2f);
         _spawnAudioSource.pitch = randomPitch;
-        _spawnAudioSource.volume = GameManager.Instance.AudioManager.SFXVolume;
+        _spawnAudioSource.volume = TitleGameManager.Instance.AudioManager.SFXVolume;
         _spawnAudioSource.Play();
     }
 }

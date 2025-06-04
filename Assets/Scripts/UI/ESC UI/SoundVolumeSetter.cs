@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SoundVolumeSetter : MonoBehaviour
@@ -15,17 +16,31 @@ public class SoundVolumeSetter : MonoBehaviour
 
     private void SetSliderValue()
     {
-        _bgmSlider.value = GameManager.Instance.AudioManager.BGMVolume.Value;
-        _sfxSlider.value = GameManager.Instance.AudioManager.SFXVolume;
+        _bgmSlider.value = TitleGameManager.Instance.AudioManager.BGMVolume.Value;
+        _sfxSlider.value = TitleGameManager.Instance.AudioManager.SFXVolume;
     }
 
     public void OnBGMChanged(Slider slider)
     {
-        GameManager.Instance.AudioManager.SetBGMVolume(slider.value);
+        TitleGameManager.Instance.AudioManager.SetBGMVolume(slider.value);
     }
 
     public void OnSFXChanged(Slider slider)
     {
-        GameManager.Instance.AudioManager.SetSFXVolume(slider.value);
+        TitleGameManager.Instance.AudioManager.SetSFXVolume(slider.value);
+    }
+
+    public void OnClickMainMenuButton()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void OnClickExitButton()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 }

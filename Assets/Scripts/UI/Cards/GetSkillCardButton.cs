@@ -44,14 +44,13 @@ public class GetSkillCardButton : MonoBehaviour
         if (_isCardSelected)
             return;
 
-        _getSkillcardSO?.ApplyGetSkillCard();
         _isCardSelected = true;
 
-        // 자기 자신 삭제 및 업그레이드 카드 등록
-        CardDrawManager.Instance.RegisterAndRemoveCard(_relatedCardButton, gameObject);
+        _getSkillcardSO?.ApplyGetSkillCard();
 
+
+        CardDrawManager.Instance.RegisterAndRemoveCard(_relatedCardButton, gameObject);
         CardDrawManager.Instance.EndEffectOfCardSelection();
 
-        //Destroy(gameObject);
     }
 }

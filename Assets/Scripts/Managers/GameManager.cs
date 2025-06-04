@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     public InGameCountManager InGameCountManager { get; private set; }
-    public AudioManager AudioManager { get; private set; }
+    public WinOrLoseManager WinOrLoseManager { get; private set; }
 
     private void Awake()
     {
@@ -15,6 +15,6 @@ public class GameManager : Singleton<GameManager>
     {
         SingletonInit();
         InGameCountManager = GetComponentInChildren<InGameCountManager>();
-        AudioManager = GetComponentInChildren<AudioManager>();
+        WinOrLoseManager = GetComponentInChildren<WinOrLoseManager>();
     }
 }

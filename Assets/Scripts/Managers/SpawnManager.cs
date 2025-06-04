@@ -13,7 +13,6 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private List<BaseMonster> monsterPrefabs_4;
     [SerializeField] private List<BaseMonster> monsterPrefabs_5;
     [SerializeField] private List<BaseMonster> monsterPrefabs_6;
-    [SerializeField] private List<BaseMonster> monsterPrefabs_7;
 
     [SerializeField] private float _spawnTimer;
     [SerializeField] private float _spawnTimerMax = 2f;
@@ -23,7 +22,11 @@ public class SpawnManager : MonoBehaviour
 
     [SerializeField] private int _currentStage = 1;
 
+    [SerializeField] private GameObject _boss;
+
     public static SpawnManager Instance { get; private set; }
+
+    [SerializeField] private HashSet<BaseMonster> _spawnedMonsters = new();
 
 
     private void Awake()
@@ -75,12 +78,6 @@ public class SpawnManager : MonoBehaviour
         {
             _pools[prefab] = new ObjectPool<BaseMonster>(transform, prefab, 20);
         }
-
-        // 스테이지7 미구현 상태
-        //foreach (BaseMonster prefab in monsterPrefabs_7)
-        //{
-        //    _pools[prefab] = new ObjectPool<BaseMonster>(transform, prefab, 20);
-        //}
     }
 
     private void HandleSpawn()
@@ -156,17 +153,9 @@ public class SpawnManager : MonoBehaviour
                 }
                 break;
 
-            // 스테이지7 미구현 상태
-            //case 7:
-            //    if (_spawnTimer >= _spawnTimerMax)
-            //    {
-            //        foreach (var monster in monsterPrefabs_7)
-            //        {
-            //            Spawn(monster, GetRandomSpawnPos(), _playerTransform);
-            //        }
-            //        _spawnTimer = 0f;
-            //    }
-            //    break;
+            case 7:
+                _boss.SetActive(true);
+                break;
 
             default:
                 Debug.LogWarning($"유효하지 않은 스테이지: {_currentStage}");
@@ -206,5 +195,40 @@ public class SpawnManager : MonoBehaviour
     {
         _currentStage++;
         _spawnTimerMax -= _spawnTimersubtractor;
+    }
+
+    public void RegisterMonster(BaseMonster monster)
+    {
+        _spawnedMonsters.Add(monster);
+    }
+
+    public void UnregisterMonster(BaseMonster monster)
+    {
+        _spawnedMonsters.Remove(monster);
+    }
+
+    public void StopAllMonster()
+    {
+        foreach (var mon in _spawnedMonsters)
+        {
+            mon.IsTimeStopped = true;
+        }
+    }
+
+    public void ResumeAllMonster()
+    {
+        foreach (var mon in _spawnedMonsters)
+        {
+            mon.IsTimeStopped = false;
+        }
+    }
+
+    public void ClearAllMonsters()
+    {
+        HashSet<BaseMonster> copy = new HashSet<BaseMonster>(_spawnedMonsters);
+        foreach (var mon in copy)
+        {
+            mon.TakeDamage(9999);
+        }
     }
 }

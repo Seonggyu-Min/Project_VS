@@ -4,11 +4,17 @@ using UnityEngine;
 
 public class InGameCountManager : MonoBehaviour
 {
-    public int KillCount { get; private set; } = 0;
+    private int _killCount = 0;
+    public int KillCount => _killCount;
+
+    private void OnEnable()
+    {
+        _killCount = 0;
+    }
 
     public void AddKillCount()
     {
-        KillCount++;
+        _killCount++;
     }
 
     // TODO: 초기화 기능 및 골드로 환산 기능 추가

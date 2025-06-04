@@ -4,11 +4,12 @@ using UnityEngine;
 
 public abstract class BasePickUpsBehaviour<T> : PooledObject<T> where T : BasePickUpsBehaviour<T>
 {
-    [SerializeField] protected LayerMask _playerLayer = 1 << 7;
-    protected float _magnetRange;
-    [SerializeField] protected float _moveSpeed = 5f;
 
     [SerializeField] protected AudioSource _soundSource;
+    [SerializeField] protected LayerMask _playerLayer = 1 << 7;
+    [SerializeField] protected float _moveSpeed = 5f;
+
+    protected float _magnetRange;
 
     protected PlayerStatManager _playerStatManager;
     protected Transform _playerTransform;

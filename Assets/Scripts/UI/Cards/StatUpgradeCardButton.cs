@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using TMPro;
@@ -15,7 +15,15 @@ public class StatUpgradeCardButton : MonoBehaviour
     private StringBuilder _upSb = new StringBuilder();
     private StringBuilder _lowSb = new StringBuilder();
 
+    private bool _isCardSelected = false;
+
     private void OnEnable()
+    {
+        InitText();
+        InitCardButton();
+    }
+
+    private void InitText()
     {
         _upSb.Clear();
         _upSb.AppendLine(_upgradeCardsSO.SkillName);
@@ -26,8 +34,18 @@ public class StatUpgradeCardButton : MonoBehaviour
         _lowerText.text = _lowSb.ToString();
     }
 
+    private void InitCardButton()
+    {
+        _isCardSelected = false;
+    }
+
     public void OnClickCard()
     {
+        if (_isCardSelected)
+            return;
+
+        _isCardSelected = true;
+
         _upgradeCardsSO?.ApplyUpgradeCard();
 
         CardDrawManager.Instance.EndEffectOfCardSelection();

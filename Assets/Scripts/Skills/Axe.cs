@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -48,7 +48,6 @@ public class Axe : BaseSkill
 
         _rb.AddForce(randomDirection * _impulseForce, ForceMode2D.Impulse);
     }
-
 
     protected override void SetDestroyTime()
     {
